@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author bmao9
  */
 @Service
-public class personaService {
+public class PersonaService {
     @Autowired
     private personaRepository repository;
     

@@ -12,10 +12,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author bmao9
- */
+
 @Repository
 public class UserRepository {
     
@@ -30,14 +27,22 @@ public class UserRepository {
         return repository.findById(id);
     }
     
+    public List<User> getByMonthBirthDay(String month){
+        return repository.findByMonthBirthtDay(month);
+    }  
+    
     public User save(User user){
         
         return repository.save(user);
     }
-    
-    
-    
     public void deleteUser(User userDelete){
         repository.delete(userDelete);
     }
+    
+    public boolean emailExists(String email) {
+        Optional<User> user = repository.findByEmail(email);
+        return user.isPresent();
+    }
+    
+      
 }

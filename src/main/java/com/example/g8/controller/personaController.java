@@ -6,7 +6,7 @@
 package com.example.g8.controller;
 
 import com.example.g8.entities.Persona;
-import com.example.g8.services.personaService;
+import com.example.g8.services.PersonaService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class personaController {
     
     @Autowired
-    private personaService service;
+    private PersonaService service;
     
     @GetMapping("/all")
     public List<Persona> list() {

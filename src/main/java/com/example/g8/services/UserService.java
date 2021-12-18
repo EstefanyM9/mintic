@@ -12,10 +12,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author bmao9
- */
 @Service
 public class UserService {
     
@@ -29,6 +25,10 @@ public class UserService {
         return repository.getUser(id);
     }
     
+    public List<User> getByMonthBirthDay(String month){
+        return repository.getByMonthBirthDay(month);
+    }   
+ 
     public boolean findAdress(String email){
         List<User>usuarios = repository.getAll();
         boolean r = false;
@@ -124,5 +124,5 @@ public class UserService {
         }).orElse(false);
         return aBoolean;
     } 
-    
+         
 }

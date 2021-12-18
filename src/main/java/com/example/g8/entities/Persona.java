@@ -11,10 +11,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- *
- * @author bmao9
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

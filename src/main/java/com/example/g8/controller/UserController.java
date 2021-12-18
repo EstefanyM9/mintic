@@ -21,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author bmao9
- */
 @RestController
 @RequestMapping("api/user")
 @CrossOrigin(origins = "*")
@@ -39,16 +35,17 @@ public class UserController {
     }
     
     //autenticacion correos existentes
-    @GetMapping("emailexist/{email}")
-    public boolean findAllAdres(@PathVariable("email")String email){
-        return service.findAdress(email);
-        
-    }
+    
     
     //autenticacion al ingreso
     @GetMapping("/{email}/{password}")
     public User findUserExistend(@PathVariable("email")String email,@PathVariable("password") String password){
         return service.findExistens(email, password);
+    }
+    
+    @GetMapping("/birthday/{month}")
+    public List<User>getByMonthBirthDay(@PathVariable("month") String month){
+        return service.getByMonthBirthDay(month);
     }
     
     @PostMapping("/new")

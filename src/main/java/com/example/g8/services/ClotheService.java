@@ -12,10 +12,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author bmao9
- */
 @Service
 public class ClotheService {
     
@@ -34,6 +30,13 @@ public class ClotheService {
         return repository.getClotheReference(reference);
     }
     
+    public List<Clothe> getByPrice(double price){
+        return repository.getByPrice(price);
+    }
+    
+    public List<Clothe> getByDescriptionContains (String description){
+        return repository.getByDescriptionContains(description);
+    }
     
    public Clothe createClothe(Clothe clotheNew){
        return repository.createClothe(clotheNew);

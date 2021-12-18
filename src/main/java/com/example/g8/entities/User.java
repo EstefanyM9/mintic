@@ -6,16 +6,13 @@
 package com.example.g8.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- *
- * @author bmao9
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +23,8 @@ public class User{
     private Integer id;
     private String identification;
     private String name;
+    private Date birthtDay;
+    private String monthBirthtDay;
     private String address;
     private String cellPhone;
     private String email;
@@ -33,6 +32,10 @@ public class User{
     private String zone;
     private String type;
 
+
+    public User(Object object, Object object0, Object object1, Object object2, Object object3, Object object4, Object object5, Object object6, Object object7) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 }

@@ -21,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author bmao9
- */
 @RestController
 @RequestMapping("api/clothe")
 @CrossOrigin(origins = "*")
@@ -38,7 +34,15 @@ public class ClothesController {
         return service.getAllClothe();
     }
     
+    @GetMapping("/price/{price}")
+    public List<Clothe> getdByPrice(@PathVariable("price")double price){
+        return service.getByPrice(price);
+    }
     
+    @GetMapping("/description/{description}")
+    public List<Clothe> getByDescriptionContains (@PathVariable("description")String description){
+        return service.getByDescriptionContains(description);
+    }
     
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,5 +63,7 @@ public class ClothesController {
        service.delete(categoryId);
         
     }
+    
+  
 }
 

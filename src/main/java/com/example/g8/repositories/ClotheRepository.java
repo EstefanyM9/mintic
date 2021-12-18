@@ -12,10 +12,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author bmao9
- */
 @Repository
 public class ClotheRepository{
     
@@ -37,9 +33,14 @@ public class ClotheRepository{
     public Optional<Clothe> getClotheId(Integer id){
         return repository.findById(id);
     }
-    
-    
-    
+
+    public List<Clothe> getByPrice(double price){
+        return repository.findByPrice(price);
+    }
+     
+    public List<Clothe> getByDescriptionContains (String description){
+        return repository.findByDescriptionContainingIgnoreCase(description);
+    }
     public void delete(Clothe clotheDelete){
         repository.delete(clotheDelete);
     }

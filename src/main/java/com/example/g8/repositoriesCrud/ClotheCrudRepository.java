@@ -6,15 +6,14 @@
 package com.example.g8.repositoriesCrud;
 
 import com.example.g8.entities.Clothe;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-/**
- *
- * @author bmao9
- */
 public interface ClotheCrudRepository extends MongoRepository<Clothe,Integer>{
     
-    Optional<Clothe> findByReference(String reference);
+        Optional<Clothe> findByReference(String reference);
+        public List<Clothe> findByPrice(Double price);
+        public List<Clothe> findByDescriptionContainingIgnoreCase(String description);
     
 }
