@@ -16,4 +16,5 @@ public interface ClotheCrudRepository extends MongoRepository<Clothe,Integer>{
         public List<Clothe> findByPrice(Double price);
         public List<Clothe> findByDescriptionContainingIgnoreCase(String description);
     
+        
 }

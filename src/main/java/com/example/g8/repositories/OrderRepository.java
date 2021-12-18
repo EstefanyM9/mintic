@@ -23,34 +23,43 @@ import org.springframework.stereotype.Repository;
 public class OrderRepository {
     
     @Autowired
-    private OrderCrudRepository repository;
-    
+    private OrderCrudRepository orderCrudRepository;
+
     public List<Order> getAll(){
-        return(List<Order>)repository.findAll();
+        return orderCrudRepository.findAll();
     }
-    public List<Order> getZone(String zone){
-        return repository.findByZone(zone);
+
+    public Optional<Order> getOrder(int id){
+        return orderCrudRepository.findById(id);
     }
-    
-    public Optional<Order> getById(Integer id){
-        return repository.findById(id);
+
+    public Order save(Order order) {
+        return orderCrudRepository.save(order);
     }
-    
-    public Order createOrder(Order order){
-        return repository.save(order);
+
+    public void update(Order order){
+        orderCrudRepository.save(order);
     }
-    
-     public List<Order> getBySalesManId(Integer id){
-        return repository.findBySalesManId(id);
+
+    public void delete(Order order){
+        orderCrudRepository.delete(order);
+    }
+
+    public List<Order> getOrderByZone(String zone){
+        return orderCrudRepository.findBySalesManZone(zone);
+    }
+
+    public List<Order> getBySalesManId(Integer id){
+        return orderCrudRepository.findBySalesManId(id);
     }
 
     public List<Order> getBySalesManIdAndStatus(Integer id, String status){
-        return repository.findBySalesManIdAndStatus(id, status);
+        return orderCrudRepository.findBySalesManIdAndStatus(id, status);
     }
 
     public List<Order> getByRegisterDayAndSalesManId(String registerDay, Integer id){
         try {
-            return repository.findByRegisterDayAndSalesManId(new SimpleDateFormat("yyyy-MM-dd").parse(registerDay), id);
+            return orderCrudRepository.findByRegisterDayAndSalesManId(new SimpleDateFormat("yyyy-MM-dd").parse(registerDay), id);
         } catch (ParseException e) {
             e.printStackTrace();
             return null;

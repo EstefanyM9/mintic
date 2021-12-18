@@ -16,34 +16,34 @@ import org.springframework.stereotype.Repository;
 public class ClotheRepository{
     
     @Autowired
-    private ClotheCrudRepository repository;
-    
-    public Clothe createClothe(Clothe PrendaNueva){
-        return repository.save(PrendaNueva);
+    private ClotheCrudRepository productCrudRepository;
+
+    public List<Clothe> getAll(){
+        return productCrudRepository.findAll();
     }
-    
-    public List<Clothe> getAllClothe(){
-        return (List<Clothe>)repository.findAll();
+
+    public Optional<Clothe> getProduct(String id){
+        return productCrudRepository.findByReference(id);
     }
-    
-    public Optional<Clothe> getClotheReference(String reference){
-        return repository.findByReference(reference);
+
+    public Clothe save(Clothe product){
+        return productCrudRepository.save(product);
     }
-    
-    public Optional<Clothe> getClotheId(Integer id){
-        return repository.findById(id);
+
+    public void update(Clothe product){
+        productCrudRepository.save(product);
+    }
+
+    public void delete(Clothe product){
+        productCrudRepository.delete(product);
     }
 
     public List<Clothe> getByPrice(double price){
-        return repository.findByPrice(price);
+        return productCrudRepository.findByPrice(price);
     }
-     
-    public List<Clothe> getByDescriptionContains (String description){
-        return repository.findByDescriptionContainingIgnoreCase(description);
+
+    public List<Clothe> getByDescriptionContains(String description){
+        return productCrudRepository.findByDescriptionContainingIgnoreCase(description);
     }
-    public void delete(Clothe clotheDelete){
-        repository.delete(clotheDelete);
-    }
-    
     
 }

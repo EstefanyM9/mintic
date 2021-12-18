@@ -14,37 +14,27 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ClotheService {
-    
     @Autowired
-    public ClotheRepository repository;
-    
-    public List<Clothe> getAllClothe(){
-        return (List<Clothe>) repository.getAllClothe();
+    private ClotheRepository productRepository;
+
+    public List<Clothe> getAll(){
+        return productRepository.getAll();
     }
-    
-    public Optional<Clothe> getClotheId(Integer id){
-        return repository.getClotheId(id);
+
+    public Optional<Clothe> getProduct(String id){
+        return productRepository.getProduct(id);
     }
-    
-    public Optional<Clothe> getClotheReference(String reference){
-        return repository.getClotheReference(reference);
+
+    public Clothe save(Clothe product){
+        if (product.getReference()== null){
+            return product;
+        }
+        return productRepository.save(product);
     }
-    
-    public List<Clothe> getByPrice(double price){
-        return repository.getByPrice(price);
-    }
-    
-    public List<Clothe> getByDescriptionContains (String description){
-        return repository.getByDescriptionContains(description);
-    }
-    
-   public Clothe createClothe(Clothe clotheNew){
-       return repository.createClothe(clotheNew);
-   }
    
-   public Clothe update(Clothe clotheEdit){
+    public Clothe update(Clothe clotheEdit){
         if(clotheEdit.getReference()!=null){
-            Optional<Clothe> resultado = repository.getClotheReference(clotheEdit.getReference());
+            Optional<Clothe> resultado = productRepository.getProduct(clotheEdit.getReference());
             if(resultado.isPresent()){
                 if(clotheEdit.isAvailability()){
                     resultado.get().setAvailability(clotheEdit.isAvailability());
@@ -58,7 +48,7 @@ public class ClotheService {
                 if(clotheEdit.getPhotography()!=null){
                     resultado.get().setPhotography(clotheEdit.getPhotography());
                 }
-                if(clotheEdit.getPrice()!=null){
+                if(clotheEdit.getPrice()!= null){
                     resultado.get().setPrice(clotheEdit.getPrice());
                 }
                 if(clotheEdit.getQuantity()!=null){
@@ -67,7 +57,7 @@ public class ClotheService {
                 if(clotheEdit.getSize()!=null){
                     resultado.get().setSize(clotheEdit.getSize());
                 }
-                repository.createClothe(resultado.get());
+                productRepository.save(resultado.get());
                 return resultado.get();
             }else{
                 return clotheEdit;
@@ -76,15 +66,21 @@ public class ClotheService {
             return clotheEdit;
         }
     }
-   
-   public boolean delete(String id){
-        Boolean aBoolean = getClotheReference(id).map(eliminado -> {
-           repository.delete(eliminado);
-           return true;
-        }).orElse(false);
-        return aBoolean;
-    } 
     
+    public boolean delete(String id){
+        return getProduct(id).map(product -> {
+            productRepository.delete(product);
+            return true;
+        }).orElse(false);
+    }
+
+    public List<Clothe> getByPrice(double price){
+        return productRepository.getByPrice(price);
+    }
+
+    public List<Clothe> getByDescriptionContains(String description){
+        return productRepository.getByDescriptionContains(description);
+    }
     
 }
 

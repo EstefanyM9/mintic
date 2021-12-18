@@ -14,10 +14,8 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface OrderCrudRepository extends MongoRepository<Order,Integer>{
     
-    @Query("{'salesMan.zone': ?0}")
-    List<Order> findByZone(final String zone);
     List<Order> findBySalesManZone(String zone);
-    List<Order> findBySalesManId(Integer id);   
+    List<Order> findBySalesManId(Integer id);
     List<Order> findBySalesManIdAndStatus(Integer id, String status);
     List<Order> findByRegisterDayAndSalesManId(Date registerDay, Integer id);
 }

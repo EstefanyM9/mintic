@@ -8,6 +8,7 @@ package com.example.g8.controller;
 import com.example.g8.entities.Clothe;
 import com.example.g8.services.ClotheService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,41 +28,44 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClothesController {
     
     @Autowired
-    private ClotheService service;
-    
+    private ClotheService productService;
+
     @GetMapping("/all")
     public List<Clothe> getAll(){
-        return service.getAllClothe();
+        return productService.getAll();
     }
-    
-    @GetMapping("/price/{price}")
-    public List<Clothe> getdByPrice(@PathVariable("price")double price){
-        return service.getByPrice(price);
+
+    @GetMapping("/{id}")
+    public Optional<Clothe> getProduct(@PathVariable("id") String id){
+        return productService.getProduct(id);
     }
-    
-    @GetMapping("/description/{description}")
-    public List<Clothe> getByDescriptionContains (@PathVariable("description")String description){
-        return service.getByDescriptionContains(description);
-    }
-    
+
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public Clothe clotheNew(@RequestBody Clothe clotheNew){
-        return service.createClothe(clotheNew);
+    public void save(@RequestBody Clothe product){
+        productService.save(product);
     }
-    
+
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public Clothe editclothe(@RequestBody Clothe clothe){
-        return service.update(clothe);
+    public Clothe update(@RequestBody Clothe product){
+        return productService.update(product);
     }
-    
-    @DeleteMapping("/{reference}")
+
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable("reference") String categoryId){
-       //return 
-       service.delete(categoryId);
-        
+    public boolean delete(@PathVariable("id") String id){
+        return productService.delete(id);
+    }
+
+    @GetMapping("/price/{price}")
+    public List<Clothe> getByPrice(@PathVariable("price") double price){
+        return productService.getByPrice(price);
+    }
+
+    @GetMapping("/description/{description}")
+    public List<Clothe> getByDescriptionContains(@PathVariable("description") String description){
+        return productService.getByDescriptionContains(description);
     }
     
   

@@ -15,114 +15,138 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     
-    @Autowired
-    private UserRepository repository;
-    
-    public List<User>getAll(){
-        return repository.getAll();
+     @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * Get = List of All Users
+     * @return
+     */
+    public List<User> getAll() {
+        return userRepository.getAll();
     }
-    public Optional<User> findID(Integer id){
-        return repository.getUser(id);
+
+    /**
+     * Get = User by its id
+     * @param id
+     * @return
+     */
+    public Optional<User> getUser(int id) {
+        return userRepository.getUser(id);
     }
-    
-    public List<User> getByMonthBirthDay(String month){
-        return repository.getByMonthBirthDay(month);
-    }   
- 
-    public boolean findAdress(String email){
-        List<User>usuarios = repository.getAll();
-        boolean r = false;
-        for(User x : usuarios){
-            if (x.getEmail().equals(email)){
-                r = true;
-            }
-        }
-        return r;
-    }
-    
-    public User findExistens(String email, String password){
-        List<User>usuarios = repository.getAll();
-        User usuarioSinRegistro = new User();
-        User usuarioConRegistro = new User();
-        int validacion = 0;
-        for(User x : usuarios){
-            if(x.getEmail().equals(email) && x.getPassword().equals(password)){
-                validacion = 1;
-                usuarioConRegistro = x;   
-            }
-            else{
-                User usuarioSinRegistro1 = new User(null,null, null, null, null, null, null, null, null);
-                usuarioSinRegistro = usuarioSinRegistro1;
-                
-            }   
-        }
-        if (validacion == 0){
-            return usuarioSinRegistro;
-        }
-        else{
-            return usuarioConRegistro;
-        }
-    }
-    
-    public User save(User user){
-        if(user.getId()==null){
-            return repository.save(user);
-        }
-        else{
-            Optional<User> resultado = repository.getUser(user.getId());
-            if (resultado.isPresent()){
+
+    /**
+     * This method saves a new user
+     * @param user
+     * @return
+     */
+    public User save(User user) {
+        if (user.getId() == null) {
+            return user;
+        } else {
+            Optional<User> dbUser = userRepository.getUser(user.getId());
+            if (dbUser.isEmpty()) {
+                if (emailExists(user.getEmail()) == false) {
+                    return userRepository.save(user);
+                } else {
+                    return user;
+                }
+            } else {
                 return user;
             }
-            else{
-                return repository.save(user);
+        }
+        }
+
+    /**
+     * This method updates a user
+     * @param user
+     * @return
+     */
+    public User update(User user) {
+        if (user.getId() != null) {
+            Optional<User> dbUser = userRepository.getUser(user.getId());
+            if (!dbUser.isEmpty()) {
+                if (user.getIdentification() != null) {
+                    dbUser.get().setIdentification(user.getIdentification());
+                }
+                if (user.getName() != null) {
+                    dbUser.get().setName(user.getName());
+                }
+
+                /*if (user.getBirthtDay() != null){
+                    dbUser.get().setBirthtDay(user.getBirthtDay());
+                }
+
+                if (user.getMonthBirthtDay() != null){
+                    dbUser.get().setMonthBirthtDay(user.getMonthBirthtDay());
+                }*/
+                if (user.getAddress() != null) {
+                    dbUser.get().setAddress(user.getAddress());
+                }
+                if (user.getCellPhone() != null) {
+                    dbUser.get().setCellPhone(user.getCellPhone());
+                }
+                if (user.getEmail() != null) {
+                    dbUser.get().setEmail(user.getEmail());
+                }
+                if (user.getPassword() != null) {
+                    dbUser.get().setPassword(user.getPassword());
+                }
+                if (user.getZone() != null) {
+                    dbUser.get().setZone(user.getZone());
+                }
+                if (user.getType() != null) {
+                    dbUser.get().setType(user.getType());
+                }
+                userRepository.update(dbUser.get());
+                return dbUser.get();
+            } else {
+                return user;
             }
         }
+        return user;
     }
-    
-    public User update(User UserEdit){
-        if(UserEdit.getId()!=null){
-            Optional<User> resultado = repository.getUser(UserEdit.getId());
-            if(resultado.isPresent()){
-                if(UserEdit.getName()!=null){
-                    resultado.get().setName(UserEdit.getName());
-                }
-                if(UserEdit.getEmail()!=null){
-                    resultado.get().setEmail(UserEdit.getEmail());
-                }
-                if(UserEdit.getAddress()!=null){
-                    resultado.get().setAddress(UserEdit.getAddress());
-                }
-                if(UserEdit.getCellPhone()!=null){
-                    resultado.get().setCellPhone(UserEdit.getCellPhone());
-                }
-                if(UserEdit.getType()!=null){
-                    resultado.get().setType(UserEdit.getType()); 
-                }
-                if(UserEdit.getZone()!=null){
-                    resultado.get().setZone(UserEdit.getZone()); 
-                }
-                if(UserEdit.getPassword()!=null){
-                    resultado.get().setPassword(UserEdit.getPassword()); 
-                }
-                if(UserEdit.getIdentification()!=null){
-                    resultado.get().setIdentification(UserEdit.getIdentification()); 
-                }
-                repository.save(resultado.get());
-                return resultado.get();
-            }else{
-                return UserEdit;
-            }
-        }else{
-            return UserEdit;
-        }
+
+    /**
+     * This method checks if an email exists
+     * @param email
+     * @return
+     */
+    public boolean emailExists(String email) {
+        return userRepository.emailExists(email);
     }
-    
-     public boolean delete(Integer id){
-        Boolean aBoolean = findID(id).map(reservation -> {
-           repository.deleteUser(reservation);
-           return true;
+
+    /**
+     * This method deletes a User
+     * @param userId
+     * @return
+     */
+    public boolean delete(int userId) {
+        Boolean userBoolean = getUser(userId).map(user -> {
+            userRepository.delete(user);
+            return true;
         }).orElse(false);
-        return aBoolean;
-    } 
-         
+        return userBoolean;
+    }
+
+    /**
+     * This method verifies if a user is registered by its email and password
+     * @param email
+     * @param password
+     * @return
+     */
+
+    public User authenticateUser(String email, String password){
+        Optional<User> usuario = userRepository.authenticateUser(email, password);
+
+        if (!usuario.isPresent()) {
+            return new User();
+        } else {
+            return usuario.get();
+        }
+    
+    }
+    /*public List<User> getByMonthBirthDay(String month){
+        return userRepository.getByMonthBirthDay(month);
+    }*/
 }

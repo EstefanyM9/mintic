@@ -17,61 +17,83 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderService {
     
-    @Autowired
-    private OrderRepository repository;
-    
-    public List<Order> getAll(){
-        return repository.getAll();
+   @Autowired
+    private OrderRepository orderRepository;
+
+    public List<Order> getAll() {
+        return orderRepository.getAll();
     }
-    public List<Order> getZone(String zona){
-        return repository.getZone(zona);
+
+    public Optional<Order> getOrder(int id) {
+        return orderRepository.getOrder(id);
     }
-    public Optional<Order> getId(Integer id){
-        return repository.getById(id);
-    }
-    public Order createOrder(Order order){
-        return repository.createOrder(order);
-    }
-    
-    public Order update(Order orderEdit){
-        if(orderEdit.getId()!=null){
-            Optional<Order> resultado = repository.getById(orderEdit.getId());
-            if(resultado.isPresent()){
-                if(orderEdit.getProducts()!=null){
-                    resultado.get().setProducts(orderEdit.getProducts());
-                }
-                if(orderEdit.getStatus()!=null){
-                    resultado.get().setStatus(orderEdit.getStatus());
-                }
-                if(orderEdit.getSalesMan()!=null){
-                    resultado.get().setSalesMan(orderEdit.getSalesMan());
-                }
-                if(orderEdit.getRegisterDay()!=null){
-                    resultado.get().setRegisterDay(orderEdit.getRegisterDay());
-                }
-                if(orderEdit.getQuantities()!=null){
-                    resultado.get().setQuantities(orderEdit.getQuantities());
-                }
-                repository.createOrder(resultado.get());
-                return resultado.get();
-            }else{
-                return orderEdit;
-            }
-        }else{
-            return orderEdit;
+
+    public Order save(Order order) {
+        if (order.getId() == null) {
+            return order;
+        } else {
+            return orderRepository.save(order);
         }
     }
-    
+
+    public Order update(Order order){
+        if (order.getId() != null){
+            Optional<Order> dbOrder = orderRepository.getOrder(order.getId());
+            if (!dbOrder.isEmpty()){
+                if (order.getId() != null){
+                    dbOrder.get().setId(order.getId());
+                }
+
+                if (order.getRegisterDay() != null){
+                    dbOrder.get().setRegisterDay(order.getRegisterDay());
+                }
+
+                if (order.getStatus() != null){
+                    dbOrder.get().setStatus(order.getStatus());
+                }
+
+                if (order.getSalesMan() != null){
+                    dbOrder.get().setSalesMan(order.getSalesMan());
+                }
+
+                if (order.getProducts() != null){
+                    dbOrder.get().setProducts(order.getProducts());
+                }
+
+                if (order.getQuantities() != null){
+                    dbOrder.get().setQuantities(order.getQuantities());
+                }
+                orderRepository.update(dbOrder.get());
+                return dbOrder.get();
+            } else {
+                return order;
+            }
+        }
+        return order;
+    }
+
+
+    public boolean delete(int orderId){
+        Boolean orderBoolean = getOrder(orderId).map(order -> {
+            orderRepository.delete(order);
+            return true;
+        }).orElse(false);
+        return orderBoolean;
+    }
+
+    public List<Order> getOrderByZone(String zone){
+        return orderRepository.getOrderByZone(zone);
+    }
+
     public List<Order> getBySalesManId(Integer id){
-        return repository.getBySalesManId(id);
+        return orderRepository.getBySalesManId(id);
     }
 
     public List<Order> getBySalesManIdAndStatus(Integer id, String status){
-        return repository.getBySalesManIdAndStatus(id, status);
+        return orderRepository.getBySalesManIdAndStatus(id, status);
     }
 
     public List<Order> getByRegisterDayAndSalesManId(String registerDay, Integer id){
-        return repository.getByRegisterDayAndSalesManId(registerDay, id);
+        return orderRepository.getByRegisterDayAndSalesManId(registerDay, id);
     }
-    
 }
